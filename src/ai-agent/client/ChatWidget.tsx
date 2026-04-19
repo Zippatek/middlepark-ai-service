@@ -23,7 +23,7 @@ interface ChatWidgetProps {
 
 export function ChatWidget({
   autoOpenAfterSeconds = 0,
-  position = { bottom: 24, right: 24 },
+  position = { bottom: 64, right: 32 },
 }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
