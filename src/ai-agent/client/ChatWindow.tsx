@@ -99,21 +99,16 @@ export function ChatWindow({
 
         <div className="flex items-center gap-1">
           <button
-            onClick={onNewChat}
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
-            title="Start new chat"
-          >
-            <RotateCcw size={14} className="text-charcoal-light" />
-          </button>
-          <button
             onClick={onMinimize}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
+            aria-label="Minimize chat"
           >
             <Minus size={14} className="text-charcoal-light" />
           </button>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
+            aria-label="Close chat"
           >
             <X size={14} className="text-charcoal-light" />
           </button>
@@ -127,14 +122,8 @@ export function ChatWindow({
         </div>
       )}
       {status === 'resolved' && (
-        <div className="px-4 py-4 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F9FAFB', color: '#374151' }}>
-          <p className="font-semibold">Chat Resolved</p>
-          <button 
-            onClick={onNewChat}
-            className="mt-1 px-5 py-2 rounded-lg bg-red text-white text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90 active:scale-95"
-          >
-            New Session
-          </button>
+        <div className="px-4 py-5 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F9FAFB', color: '#374151' }}>
+          <p className="font-semibold tracking-tight uppercase text-[10px] text-charcoal-light">Conversation Ended</p>
         </div>
       )}
 

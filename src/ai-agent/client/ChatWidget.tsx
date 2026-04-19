@@ -129,30 +129,16 @@ export function ChatWidget({
       )}
 
       {/* -- Main FAB Button --------------------------------------- */}
-      {!isMinimized && (
+      {!isMinimized && !isOpen && (
         <button
-          onClick={isOpen ? handleClose : handleOpen}
+          onClick={handleOpen}
           className="relative w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 bg-charcoal-dark hover:bg-black pointer-events-auto"
-          style={{
-            borderRadius: isOpen ? '16px 16px 4px 16px' : '20px',
-          }}
-          aria-label={isOpen ? 'Close chat' : 'Open chat'}
+          aria-label="Open chat"
         >
-          <div
-            style={{
-              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              transform: isOpen ? 'rotate(90deg) scale(0.85)' : 'rotate(0deg) scale(1)',
-            }}
-          >
-            {isOpen ? (
-              <X size={24} strokeWidth={2.5} />
-            ) : (
-              <MessageCircle size={24} strokeWidth={2} />
-            )}
-          </div>
+          <MessageCircle size={24} strokeWidth={2} />
 
           {/* Unread badge */}
-          {unreadCount > 0 && !isOpen && (
+          {unreadCount > 0 && (
             <span
               className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-[10px] flex items-center justify-center font-bold border-2 border-white"
               style={{ backgroundColor: '#ED1B24' }}
