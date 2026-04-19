@@ -33,6 +33,10 @@ export function ChatWidget({
 
   const chat = useChat()
 
+  useEffect(() => {
+    console.log('ChatWidget mounted on', window.location.href)
+  }, [])
+
   // Auto-open
   useEffect(() => {
     if (autoOpenAfterSeconds > 0) {

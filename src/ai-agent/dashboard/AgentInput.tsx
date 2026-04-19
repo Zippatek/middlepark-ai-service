@@ -95,8 +95,7 @@ export function AgentInput({ onSendMessage, onAddNote, isLoading, agentName }: A
                 : 'Add an internal note (customer cannot see this)...'
             }
             rows={2}
-            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent"
-            className="text-charcoal"
+            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent text-charcoal"
           />
           <button
             type="submit"
@@ -112,7 +111,7 @@ export function AgentInput({ onSendMessage, onAddNote, isLoading, agentName }: A
         </div>
 
         {mode === 'note' && (
-          <p className="text-[10px] mt-1.5 pl-1" className="text-charcoal-light">
+          <p className="text-[10px] mt-1.5 pl-1 text-charcoal-light">
             🔒 Internal notes are only visible to the MiddlePark team.
           </p>
         )}

@@ -89,7 +89,7 @@ export function ConversationDetail({
           >
             <Bot size={28} strokeWidth={1} style={{ color: '#C8D9CC' }} />
           </div>
-          <p className="text-sm font-medium" className="text-charcoal-light">Select a conversation</p>
+          <p className="text-sm font-medium text-charcoal-light">Select a conversation</p>
           <p className="text-xs mt-1" style={{ color: '#BBBCBF' }}>to view the full thread</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function ConversationDetail({
               <User size={16} strokeWidth={1.5} className="text-charcoal" />
             </div>
             <div>
-              <p className="text-sm font-semibold" className="text-charcoal">
+              <p className="text-sm font-semibold text-charcoal">
                 {conversation.visitorInfo.name || 'Anonymous Visitor'}
               </p>
               <ConversationBadge status={conversation.status} size="sm" />
@@ -130,8 +130,7 @@ export function ConversationDetail({
               <button
                 onClick={() => onTakeOver(conversation.id)}
                 disabled={isLoading}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all disabled:opacity-50"
-                className="bg-green"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all disabled:opacity-50 bg-green"
               >
                 <UserCheck size={14} strokeWidth={1.5} />
                 Take Over
@@ -257,7 +256,7 @@ export function ConversationDetail({
       >
         {/* Visitor Info */}
         <div className="px-4 py-4" style={{ borderBottom: '1px solid #F0F0F0' }}>
-          <p className="text-[10px] uppercase tracking-widest font-semibold mb-3" className="text-charcoal-light">
+          <p className="text-[10px] uppercase tracking-widest font-semibold mb-3 text-charcoal-light">
             Visitor
           </p>
 
@@ -265,18 +264,18 @@ export function ConversationDetail({
             {conversation.visitorInfo.phone && (
               <div className="flex items-center gap-2">
                 <Phone size={13} strokeWidth={1.5} className="text-green" />
-                <span className="text-xs" className="text-charcoal">{conversation.visitorInfo.phone}</span>
+                <span className="text-xs text-charcoal">{conversation.visitorInfo.phone}</span>
               </div>
             )}
             {conversation.visitorInfo.email && (
               <div className="flex items-center gap-2">
                 <Mail size={13} strokeWidth={1.5} className="text-green" />
-                <span className="text-xs truncate" className="text-charcoal">{conversation.visitorInfo.email}</span>
+                <span className="text-xs truncate text-charcoal">{conversation.visitorInfo.email}</span>
               </div>
             )}
             <div className="flex items-center gap-2">
               <Calendar size={13} strokeWidth={1.5} className="text-green" />
-              <span className="text-xs" className="text-charcoal">
+              <span className="text-xs text-charcoal">
                 {new Date(conversation.startedAt).toLocaleDateString('en-NG', {
                   day: 'numeric', month: 'short', year: 'numeric'
                 })}
@@ -287,23 +286,23 @@ export function ConversationDetail({
 
         {/* Lead Qualifications */}
         <div className="px-4 py-4" style={{ borderBottom: '1px solid #F0F0F0' }}>
-          <p className="text-[10px] uppercase tracking-widest font-semibold mb-3" className="text-charcoal-light">
+          <p className="text-[10px] uppercase tracking-widest font-semibold mb-3 text-charcoal-light">
             Qualifications
           </p>
 
           <div className="space-y-2">
             {conversation.leadData.intent && (
               <div>
-                <p className="text-[10px]" className="text-charcoal-light">Intent</p>
-                <p className="text-xs capitalize font-medium" className="text-charcoal">
+                <p className="text-[10px] text-charcoal-light">Intent</p>
+                <p className="text-xs capitalize font-medium text-charcoal">
                   {conversation.leadData.intent}
                 </p>
               </div>
             )}
             {(conversation.leadData.budgetMin || conversation.leadData.budgetMax) && (
               <div>
-                <p className="text-[10px]" className="text-charcoal-light">Budget</p>
-                <p className="text-xs font-medium" className="text-charcoal">
+                <p className="text-[10px] text-charcoal-light">Budget</p>
+                <p className="text-xs font-medium text-charcoal">
                   {conversation.leadData.budgetMin ? formatNaira(conversation.leadData.budgetMin) : '—'}
                   {' – '}
                   {conversation.leadData.budgetMax ? formatNaira(conversation.leadData.budgetMax) : '—'}
@@ -312,19 +311,19 @@ export function ConversationDetail({
             )}
             {conversation.leadData.areasOfInterest && conversation.leadData.areasOfInterest.length > 0 && (
               <div>
-                <p className="text-[10px]" className="text-charcoal-light">Areas</p>
-                <p className="text-xs" className="text-charcoal">
+                <p className="text-[10px] text-charcoal-light">Areas</p>
+                <p className="text-xs text-charcoal">
                   {conversation.leadData.areasOfInterest.join(', ')}
                 </p>
               </div>
             )}
             {conversation.leadData.developmentsInterested && conversation.leadData.developmentsInterested.length > 0 && (
               <div>
-                <p className="text-[10px]" className="text-charcoal-light">Interested In</p>
+                <p className="text-[10px] text-charcoal-light">Interested In</p>
                 {conversation.leadData.developmentsInterested.map((d) => (
                   <div key={d} className="flex items-center gap-1 mt-0.5">
                     <Building2 size={11} strokeWidth={1.5} className="text-green" />
-                    <span className="text-xs" className="text-charcoal">{d}</span>
+                    <span className="text-xs text-charcoal">{d}</span>
                   </div>
                 ))}
               </div>
@@ -335,7 +334,7 @@ export function ConversationDetail({
         {/* Internal Notes */}
         {conversation.internalNotes && conversation.internalNotes.length > 0 && (
           <div className="px-4 py-4">
-            <p className="text-[10px] uppercase tracking-widest font-semibold mb-3" className="text-charcoal-light">
+            <p className="text-[10px] uppercase tracking-widest font-semibold mb-3 text-charcoal-light">
               Internal Notes
             </p>
             <div className="space-y-2">

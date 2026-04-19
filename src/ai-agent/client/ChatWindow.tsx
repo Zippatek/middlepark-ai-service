@@ -187,14 +187,12 @@ export function ChatWindow({
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             rows={1}
-            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent"
-            className="text-charcoal"
+            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent text-charcoal"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-40"
-            className="bg-green"
+            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-40 bg-green"
             aria-label="Send message"
           >
             <Send size={14} strokeWidth={2} className="text-white" style={{ transform: 'translateX(1px)' }} />

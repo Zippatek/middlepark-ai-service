@@ -63,7 +63,7 @@ export function ConversationList({
       {/* ── Header ──────────────────────────────────────────────── */}
       <div className="px-4 pt-5 pb-4 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-sm" className="text-charcoal">
+          <h2 className="font-semibold text-sm text-charcoal">
             Conversations
           </h2>
           <button
@@ -84,14 +84,12 @@ export function ConversationList({
           <Search
             size={14}
             strokeWidth={1.5}
-            className="absolute left-3 top-1/2 -translate-y-1/2"
-            className="text-charcoal-light"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-light"
           />
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg focus:outline-none"
-            className="bg-cream"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-lg focus:outline-none bg-cream text-charcoal"
           />
         </div>
       </div>
@@ -118,7 +116,7 @@ export function ConversationList({
         {conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-48 text-center px-6">
             <MessageCircle size={32} strokeWidth={1} style={{ color: '#C8D9CC' }} />
-            <p className="text-xs mt-3" className="text-charcoal-light">No conversations yet</p>
+            <p className="text-xs mt-3 text-charcoal-light">No conversations yet</p>
           </div>
         ) : (
           conversations.map((conv) => {
@@ -145,7 +143,7 @@ export function ConversationList({
                 )}
 
                 <div className="flex items-start justify-between mb-1">
-                  <p className="text-xs font-semibold" className="text-charcoal">
+                  <p className="text-xs font-semibold text-charcoal">
                     {conv.visitorName}
                   </p>
                   <span className="text-[10px]" style={{ color: '#BBBCBF' }}>
@@ -163,7 +161,7 @@ export function ConversationList({
                 <div className="flex items-center gap-2">
                   <ConversationBadge status={conv.status} size="sm" />
                   {conv.developmentInterest && (
-                    <span className="text-[10px]" className="text-charcoal-light">
+                    <span className="text-[10px] text-charcoal-light">
                       · {conv.developmentInterest}
                     </span>
                   )}

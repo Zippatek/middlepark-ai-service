@@ -17,6 +17,22 @@ import { DEVELOPMENTS, toPropertyCard } from '../../../server/knowledge'
 import { nanoid } from '../../../server/utils'
 import type { ChatMessage } from '../../../server/types'
 
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url)
+  const sessionId = searchParams.get('sessionId')
+
+  if (!sessionId) {
+    return NextResponse.json({ error: 'sessionId is required' }, { status: 400 })
+  }
+
+  const conv = getOrCreateConversation(sessionId)
+  return NextResponse.json({
+    conversationId: conv.id,
+    status: conv.status,
+    messages: conv.messages,
+  })
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -28,16 +44,6 @@ export async function POST(req: NextRequest) {
 
     // Get or create conversation
     const conv = getOrCreateConversation(sessionId)
-
-    // If conversation is being handled by a human, don't respond with AI
-    if (conv.status === 'human_active') {
-      return NextResponse.json({
-        reply: null,
-        conversationId: conv.id,
-        status: conv.status,
-        message: 'Conversation is being handled by a human agent',
-      })
-    }
 
     // Update visitor name if provided
     if (visitorName && !conv.visitorInfo.name) {
@@ -54,6 +60,16 @@ export async function POST(req: NextRequest) {
       timestamp: new Date().toISOString(),
     }
     addMessage(conv.id, userMessage)
+
+    // If conversation is being handled by a human, don't respond with AI
+    if (conv.status === 'human_active') {
+      return NextResponse.json({
+        reply: null,
+        conversationId: conv.id,
+        status: conv.status,
+        message: 'Conversation is being handled by a human agent',
+      })
+    }
 
     // Build LLM message history
     // For Gemini: use 'user' and 'model' roles

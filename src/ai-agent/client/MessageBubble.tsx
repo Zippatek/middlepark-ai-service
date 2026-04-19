@@ -32,12 +32,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       <div className="flex justify-end gap-2 mb-3">
         <div className="max-w-[80%]">
           <div
-            className="px-3.5 py-2.5 rounded-2xl rounded-br-sm text-sm leading-relaxed"
-            className="bg-green"
+            className="px-3.5 py-2.5 rounded-2xl rounded-br-sm text-sm leading-relaxed bg-green text-white"
           >
             {message.content}
           </div>
-          <p className="text-[10px] text-right mt-1" className="text-charcoal-light">
+          <p className="text-[10px] text-right mt-1 text-charcoal-light">
             {formatTime(message.timestamp)}
           </p>
         </div>
@@ -71,7 +70,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       <div className="max-w-[85%]">
         {/* Agent name label */}
         {isHumanAgent && (
-          <p className="text-[10px] font-semibold mb-1" className="text-green">
+          <p className="text-[10px] font-semibold mb-1 text-green">
             {message.agentName || 'MiddlePark Team'}
           </p>
         )}
@@ -97,7 +96,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           </div>
         )}
 
-        <p className="text-[10px] mt-1" className="text-charcoal-light">
+        <p className="text-[10px] mt-1 text-charcoal-light">
           {formatTime(message.timestamp)}
         </p>
       </div>

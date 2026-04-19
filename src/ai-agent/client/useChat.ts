@@ -37,6 +37,7 @@ function getOrCreateSessionId(): string {
   if (stored) return stored
   const newId = generateSessionId()
   sessionStorage.setItem('mp_chat_session', newId)
+  console.log('New chat session created:', newId)
   return newId
 }
 
@@ -62,26 +63,54 @@ export function useChat() {
     ])
   }, [])
 
-  // Poll for new messages when a human has taken over (every 3 seconds)
+  // Poll for new messages (every 3 seconds)
   useEffect(() => {
-    if (status === 'human_active' && conversationId) {
-      pollIntervalRef.current = setInterval(async () => {
-        try {
-          const res = await fetch(`/api/ai-agent/conversations?id=${conversationId}`, {
-            headers: { 'x-dashboard-token': '' }, // Public polling — the route should support session-based auth
+    // Only poll if we have a session. We poll regardless of status to catch takeovers.
+    const poll = async () => {
+      try {
+        const res = await fetch(`/api/ai-agent/chat?sessionId=${sessionId.current}`)
+        if (!res.ok) return
+        const data = await res.json()
+
+        if (data.status) setStatus(data.status)
+        if (data.conversationId) setConversationId(data.conversationId)
+        
+        if (data.messages && data.messages.length > 0) {
+          setMessages(prev => {
+            const existingIds = new Set(prev.map(m => m.id))
+            
+            // Filter out messages we already have by ID
+            const newMessages = data.messages.filter((m: ClientMessage) => {
+              if (existingIds.has(m.id)) return false
+              
+              // Special case: if it's a user message, check if we have an optimistic version of it
+              if (m.role === 'user') {
+                const hasOptimistic = prev.some(ep => 
+                  ep.role === 'user' && 
+                  ep.content === m.content && 
+                  ep.id.startsWith('user_')
+                )
+                if (hasOptimistic) return false
+              }
+              
+              return true
+            })
+            
+            if (newMessages.length === 0) return prev
+            return [...prev, ...newMessages]
           })
-          // Note: in production, use a proper auth token or WebSocket
-          // For now this is a placeholder for the polling mechanism
-        } catch {
-          // Silently ignore poll errors
         }
-      }, 3000)
+      } catch (err) {
+        console.error('Polling error:', err)
+      }
     }
+
+    pollIntervalRef.current = setInterval(poll, 3000)
 
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current)
     }
-  }, [status, conversationId])
+  }, [])
 
   const sendMessage = useCallback(
     async (content: string, visitorName?: string) => {
