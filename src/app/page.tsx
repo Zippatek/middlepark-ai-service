@@ -61,7 +61,7 @@ export default function Home() {
           </a>
 
           {/* Chat API Shortcut */}
-          <a href="/api/chat" className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-cream-border hover:border-red hover:shadow-card-hover transition-all duration-300">
+          <a href="/api/ai-agent/chat" className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-cream-border hover:border-red hover:shadow-card-hover transition-all duration-300">
             <div className="absolute inset-0 bg-red-tint opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-red-tint text-red flex items-center justify-center mb-4">
@@ -80,7 +80,7 @@ export default function Home() {
           </a>
 
           {/* Conversations API Shortcut */}
-          <a href="/api/conversations" className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-cream-border hover:border-red hover:shadow-card-hover transition-all duration-300">
+          <a href="/api/ai-agent/conversations" className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-cream-border hover:border-red hover:shadow-card-hover transition-all duration-300">
             <div className="absolute inset-0 bg-red-tint opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-red-tint text-red flex items-center justify-center mb-4">
