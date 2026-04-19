@@ -88,15 +88,15 @@ export function ChatWidget({
 
   return (
     <div
-      className="fixed z-[9999]"
+      className="fixed z-[9999] pointer-events-none"
       style={{ bottom: position.bottom, right: position.right }}
     >
       {/* -- Chat Panel -------------------------------------------- */}
       {isOpen && !isMinimized && (
         <div
-          className="absolute bottom-16 right-0"
+          className="absolute bottom-16 right-0 pointer-events-auto"
           style={{
-            animation: 'chatSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+            animation: 'chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
           <ChatWindow
@@ -116,7 +116,7 @@ export function ChatWidget({
       {isMinimized && (
         <button
           onClick={handleOpen}
-          className="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-white text-sm font-semibold shadow-lg transition-all hover:shadow-xl bg-charcoal-dark hover:bg-black"
+          className="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-white text-sm font-semibold shadow-lg transition-all hover:shadow-xl bg-charcoal-dark hover:bg-black pointer-events-auto"
         >
           <MessageCircle size={18} strokeWidth={2} />
           <span>Chat with us</span>
@@ -132,7 +132,7 @@ export function ChatWidget({
       {!isMinimized && (
         <button
           onClick={isOpen ? handleClose : handleOpen}
-          className="relative w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 bg-charcoal-dark hover:bg-black"
+          className="relative w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 bg-charcoal-dark hover:bg-black pointer-events-auto"
           style={{
             borderRadius: isOpen ? '16px 16px 4px 16px' : '20px',
           }}

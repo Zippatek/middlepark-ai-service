@@ -76,7 +76,7 @@ export function ChatWindow({
         width: 'min(380px, 92vw)',
         height: 'min(620px, 80vh)',
         maxHeight: 'calc(100vh - 120px)',
-        boxShadow: '0 24px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0,0,0,0.06)',
+        boxShadow: '0 12px 48px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0,0,0,0.05)',
         background: '#fff',
         border: '1px solid #ECECEC',
       }}
