@@ -73,37 +73,37 @@ export function ChatWindow({
     <div
       className="flex flex-col rounded-2xl overflow-hidden"
       style={{
-        width: '360px',
-        height: '560px',
-        boxShadow: '0 24px 64px rgba(40, 107, 56, 0.18), 0 4px 16px rgba(0,0,0,0.08)',
+        width: 'min(380px, 92vw)',
+        height: 'min(620px, 80vh)',
+        maxHeight: 'calc(100vh - 120px)',
+        boxShadow: '0 24px 64px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0,0,0,0.06)',
         background: '#fff',
+        border: '1px solid #ECECEC',
       }}
     >
       {/* ── Header ────────────────────────────────────────────────── */}
       <div
-        className="flex items-center justify-between px-4 py-3.5 flex-shrink-0"
+        className="flex items-center justify-between px-4 py-4 flex-shrink-0 border-b"
         style={{
-          background: 'linear-gradient(135deg, #286B38 0%, #1e5229 100%)',
+          background: '#fff',
+          borderColor: '#F0F0F0',
         }}
       >
         <div className="flex items-center gap-3">
           {/* Logo mark */}
           <div
-            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{ background: '#F8F8F8', border: '1px solid #EDEDED' }}
           >
-            <span className="text-white font-bold text-xs tracking-tight">MP</span>
+            <span className="text-charcoal-dark font-bold text-xs tracking-tight">MP</span>
           </div>
           <div>
-            <p className="text-white text-sm font-semibold leading-tight">MiddlePark Properties</p>
-            <div className="flex items-center gap-1 mt-0.5">
-              <span style={{ color: statusConfig.color === '#286B38' ? '#90E6A8' : '#FCD34D' }}>
-                {statusConfig.icon}
+            <p className="text-charcoal-dark text-sm font-semibold leading-tight">MiddlePark Properties</p>
+            <div className="flex items-center gap-1.5 mt-1">
+              <span style={{ color: statusConfig.color === '#286B38' ? '#10B981' : '#F59E0B' }}>
+                <span className="w-2 h-2 rounded-full block" style={{ backgroundColor: 'currentColor' }} />
               </span>
-              <span className="text-white/70 text-[10px]">{statusConfig.label}</span>
-              <span className="w-1.5 h-1.5 rounded-full ml-1 animate-pulse" style={{
-                backgroundColor: status === 'waiting_for_human' ? '#FCD34D' : '#90E6A8'
-              }} />
+              <span className="text-charcoal-light text-[10px] font-medium tracking-wide uppercase">{statusConfig.label}</span>
             </div>
           </div>
         </div>
@@ -111,51 +111,51 @@ export function ChatWindow({
         <div className="flex items-center gap-1">
           <button
             onClick={onNewChat}
-            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/20"
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
             title="Start new chat"
             aria-label="Start new chat"
           >
-            <RotateCcw size={14} strokeWidth={2} className="text-white" />
+            <RotateCcw size={15} strokeWidth={2} className="text-charcoal" />
           </button>
           <button
             onClick={onMinimize}
-            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/20"
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
             aria-label="Minimize chat"
           >
-            <Minus size={14} strokeWidth={2} className="text-white" />
+            <Minus size={15} strokeWidth={2} className="text-charcoal" />
           </button>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/20"
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
             aria-label="Close chat"
           >
-            <X size={14} strokeWidth={2} className="text-white" />
+            <X size={15} strokeWidth={2} className="text-charcoal" />
           </button>
         </div>
       </div>
 
       {/* ── Status banner (waiting/resolved) ─────────────────────── */}
       {status === 'waiting_for_human' && (
-        <div className="px-4 py-2 text-xs text-center flex-shrink-0" style={{ background: '#FEF3C7', color: '#92400E' }}>
-          ⏳ A member of our team will join shortly...
+        <div className="px-4 py-2.5 text-[11px] text-center flex-shrink-0" style={{ background: '#F9FAFB', color: '#6B7280', borderBottom: '1px solid #F3F4F6' }}>
+          Our team typically responds in a few minutes.
         </div>
       )}
       {status === 'resolved' && (
-        <div className="px-4 py-3 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F0F4F1', color: '#286B38' }}>
-          <p>✓ This conversation has been resolved.</p>
+        <div className="px-4 py-4 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F8F8F8', color: '#5A5B5F' }}>
+          <p className="font-medium">This conversation has been resolved.</p>
           <button 
             onClick={onNewChat}
-            className="px-4 py-1.5 rounded-full bg-green text-white font-semibold transition-all hover:opacity-90 shadow-sm"
+            className="mt-1 px-5 py-2 rounded-lg bg-charcoal-dark text-white text-[11px] font-semibold transition-all hover:opacity-90 shadow-sm"
           >
-            Start New Chat
+            Start New Conversation
           </button>
         </div>
       )}
 
       {/* ── Messages ──────────────────────────────────────────────── */}
       <div
-        className="flex-1 overflow-y-auto px-4 py-4"
-        style={{ background: '#FCFCFC' }}
+        className="flex-1 overflow-y-auto px-4 py-6"
+        style={{ background: '#FFF' }}
       >
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
@@ -171,17 +171,17 @@ export function ChatWindow({
 
       {/* ── Quick replies ─────────────────────────────────────────── */}
       {messages.length <= 2 && !isLoading && (
-        <div className="px-4 pb-2 flex gap-1.5 flex-wrap flex-shrink-0" style={{ background: '#FCFCFC' }}>
+        <div className="px-4 pb-3 flex gap-1.5 flex-wrap flex-shrink-0" style={{ background: '#FFF' }}>
           {[
-            '📍 Show me available properties',
-            '💰 What\'s the price range?',
-            '📞 Speak to an agent',
+            'Properties for sale',
+            'Rental availability',
+            'Speak to an agent',
           ].map((quickReply) => (
             <button
               key={quickReply}
               onClick={() => onSendMessage(quickReply)}
-              className="text-[11px] px-2.5 py-1.5 rounded-full border transition-all duration-150 hover:bg-[#F0F4F1]"
-              style={{ borderColor: '#C8D9CC', color: '#286B38', backgroundColor: '#fff' }}
+              className="text-[11px] px-3 py-2 rounded-lg border transition-all duration-150 hover:bg-black/5"
+              style={{ borderColor: '#E5E5E5', color: '#5A5B5F', backgroundColor: '#fff' }}
             >
               {quickReply}
             </button>
@@ -193,28 +193,29 @@ export function ChatWindow({
       {!isResolved && (
         <form
           onSubmit={handleSubmit}
-          className="px-4 py-3 border-t flex items-end gap-2 flex-shrink-0"
-          style={{ borderColor: '#E8EDE9', background: '#fff' }}
+          className="px-4 py-4 border-t flex items-center gap-3 flex-shrink-0"
+          style={{ borderColor: '#F0F0F0', background: '#fff' }}
         >
           <textarea
             ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type your message..."
+            placeholder="Write a message..."
             rows={1}
-            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent text-charcoal"
+            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent text-charcoal-dark placeholder:text-charcoal-light/60"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-40 bg-green"
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-30 bg-charcoal-dark hover:bg-black"
             aria-label="Send message"
           >
-            <Send size={14} strokeWidth={2} className="text-white" style={{ transform: 'translateX(1px)' }} />
+            <Send size={16} strokeWidth={2} className="text-white" />
           </button>
         </form>
-      )}
+      </div>
+    </div>
 
       {/* ── Footer ────────────────────────────────────────────────── */}
       <div

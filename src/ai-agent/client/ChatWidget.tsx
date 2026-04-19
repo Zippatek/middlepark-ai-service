@@ -116,12 +116,12 @@ export function ChatWidget({
       {isMinimized && (
         <button
           onClick={handleOpen}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-medium shadow-lg transition-all hover:shadow-xl bg-green"
+          className="flex items-center gap-2.5 px-5 py-3 rounded-2xl text-white text-sm font-semibold shadow-lg transition-all hover:shadow-xl bg-charcoal-dark hover:bg-black"
         >
-          <MessageCircle size={16} strokeWidth={1.5} />
+          <MessageCircle size={18} strokeWidth={2} />
           <span>Chat with us</span>
           {unreadCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-[#ED1B24] text-white text-[10px] flex items-center justify-center font-bold">
+            <span className="w-5 h-5 rounded-full bg-white text-charcoal-dark text-[10px] flex items-center justify-center font-bold">
               {unreadCount}
             </span>
           )}
@@ -132,7 +132,10 @@ export function ChatWidget({
       {!isMinimized && (
         <button
           onClick={isOpen ? handleClose : handleOpen}
-          className="relative w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 bg-green"
+          className="relative w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 bg-charcoal-dark hover:bg-black"
+          style={{
+            borderRadius: isOpen ? '16px 16px 4px 16px' : '20px',
+          }}
           aria-label={isOpen ? 'Close chat' : 'Open chat'}
         >
           <div
@@ -142,17 +145,17 @@ export function ChatWidget({
             }}
           >
             {isOpen ? (
-              <X size={22} strokeWidth={2} />
+              <X size={24} strokeWidth={2.5} />
             ) : (
-              <MessageCircle size={22} strokeWidth={1.5} />
+              <MessageCircle size={24} strokeWidth={2} />
             )}
           </div>
 
           {/* Unread badge */}
           {unreadCount > 0 && !isOpen && (
             <span
-              className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-[10px] flex items-center justify-center font-bold"
-              style={{ backgroundColor: '#ED1B24' }}
+              className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full text-white text-[11px] flex items-center justify-center font-bold border-2 border-white shadow-sm"
+              style={{ backgroundColor: '#10B981' }}
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
@@ -165,23 +168,25 @@ export function ChatWidget({
         @keyframes chatSlideUp {
           from {
             opacity: 0;
-            transform: translateY(16px) scale(0.96);
+            transform: translateY(20px) scale(0.95);
+            filter: blur(4px);
           }
           to {
             opacity: 1;
             transform: translateY(0) scale(1);
+            filter: blur(0);
           }
         }
 
         @keyframes chatPulse {
           0% {
-            box-shadow: 0 0 0 0 rgba(40, 107, 56, 0.5);
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
           }
           70% {
-            box-shadow: 0 0 0 16px rgba(40, 107, 56, 0);
+            box-shadow: 0 0 0 15px rgba(0, 0, 0, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(40, 107, 56, 0);
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
           }
         }
 
