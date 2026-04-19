@@ -83,28 +83,17 @@ export function ChatWindow({
     >
       {/* -- Header -------------------------------------------------- */}
       <div
-        className="flex items-center justify-between px-4 py-4 flex-shrink-0 border-b"
+        className="flex items-center justify-between px-5 py-4 flex-shrink-0 border-b"
         style={{
           background: '#fff',
-          borderColor: '#F0F0F0',
+          borderColor: '#F5F5F5',
         }}
       >
-        <div className="flex items-center gap-3">
-          {/* Logo mark */}
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-            style={{ background: '#F8F8F8', border: '1px solid #EDEDED' }}
-          >
-            <span className="text-charcoal-dark font-bold text-xs tracking-tight">MP</span>
-          </div>
-          <div>
-            <p className="text-charcoal-dark text-sm font-semibold leading-tight">MiddlePark Properties</p>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span style={{ color: statusConfig.color === '#286B38' ? '#10B981' : '#F59E0B' }}>
-                <span className="w-2 h-2 rounded-full block" style={{ backgroundColor: 'currentColor' }} />
-              </span>
-              <span className="text-charcoal-light text-[10px] font-medium tracking-wide uppercase">{statusConfig.label}</span>
-            </div>
+        <div className="flex flex-col">
+          <p className="text-charcoal-dark text-[13px] font-bold tracking-tight">MiddlePark Properties</p>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: status === 'waiting_for_human' ? '#F59E0B' : '#ED1B24' }} />
+            <span className="text-charcoal-light text-[9px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
           </div>
         </div>
 
@@ -113,41 +102,38 @@ export function ChatWindow({
             onClick={onNewChat}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
             title="Start new chat"
-            aria-label="Start new chat"
           >
-            <RotateCcw size={15} strokeWidth={2} className="text-charcoal" />
+            <RotateCcw size={14} className="text-charcoal-light" />
           </button>
           <button
             onClick={onMinimize}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
-            aria-label="Minimize chat"
           >
-            <Minus size={15} strokeWidth={2} className="text-charcoal" />
+            <Minus size={14} className="text-charcoal-light" />
           </button>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-black/5"
-            aria-label="Close chat"
           >
-            <X size={15} strokeWidth={2} className="text-charcoal" />
+            <X size={14} className="text-charcoal-light" />
           </button>
         </div>
       </div>
 
       {/* -- Status banner (waiting/resolved) ----------------------- */}
       {status === 'waiting_for_human' && (
-        <div className="px-4 py-2.5 text-[11px] text-center flex-shrink-0" style={{ background: '#F9FAFB', color: '#6B7280', borderBottom: '1px solid #F3F4F6' }}>
-          Our team typically responds in a few minutes.
+        <div className="px-4 py-2 text-[10px] text-center flex-shrink-0 font-medium" style={{ background: '#FFF9F0', color: '#B45309' }}>
+          Searching for an available agent...
         </div>
       )}
       {status === 'resolved' && (
-        <div className="px-4 py-4 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F8F8F8', color: '#5A5B5F' }}>
-          <p className="font-medium">This conversation has been resolved.</p>
+        <div className="px-4 py-4 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F9FAFB', color: '#374151' }}>
+          <p className="font-semibold">Chat Resolved</p>
           <button 
             onClick={onNewChat}
-            className="mt-1 px-5 py-2 rounded-lg bg-charcoal-dark text-white text-[11px] font-semibold transition-all hover:opacity-90 shadow-sm"
+            className="mt-1 px-5 py-2 rounded-lg bg-red text-white text-[10px] font-bold uppercase tracking-wider transition-all hover:opacity-90 active:scale-95"
           >
-            Start New Conversation
+            New Session
           </button>
         </div>
       )}
@@ -171,17 +157,16 @@ export function ChatWindow({
 
       {/* -- Quick replies ------------------------------------------- */}
       {messages.length <= 2 && !isLoading && (
-        <div className="px-4 pb-3 flex gap-1.5 flex-wrap flex-shrink-0" style={{ background: '#FFF' }}>
+        <div className="px-4 pb-4 flex gap-1.5 flex-wrap flex-shrink-0" style={{ background: '#FFF' }}>
           {[
             'Properties for sale',
-            'Rental availability',
-            'Speak to an agent',
+            'Rental options',
           ].map((quickReply) => (
             <button
               key={quickReply}
               onClick={() => onSendMessage(quickReply)}
-              className="text-[11px] px-3 py-2 rounded-lg border transition-all duration-150 hover:bg-black/5"
-              style={{ borderColor: '#E5E5E5', color: '#5A5B5F', backgroundColor: '#fff' }}
+              className="text-[10px] px-3 py-1.5 rounded-lg border font-medium transition-all duration-150 hover:bg-black/5"
+              style={{ borderColor: '#F0F0F0', color: '#6B7280', backgroundColor: '#fff' }}
             >
               {quickReply}
             </button>
@@ -194,24 +179,24 @@ export function ChatWindow({
         <form
           onSubmit={handleSubmit}
           className="px-4 py-4 border-t flex items-center gap-3 flex-shrink-0"
-          style={{ borderColor: '#F0F0F0', background: '#fff' }}
+          style={{ borderColor: '#F5F5F5', background: '#fff' }}
         >
           <textarea
             ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Write a message..."
+            placeholder="Write message..."
             rows={1}
-            className="flex-1 resize-none text-sm leading-relaxed focus:outline-none bg-transparent text-charcoal-dark placeholder:text-charcoal-light/60"
+            className="flex-1 resize-none text-[13px] leading-relaxed focus:outline-none bg-transparent text-charcoal-dark placeholder:text-charcoal-light/50"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-30 bg-charcoal-dark hover:bg-black"
+            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-150 disabled:opacity-20 bg-red hover:scale-105 active:scale-95 shadow-sm"
             aria-label="Send message"
           >
-            <Send size={16} strokeWidth={2} className="text-white" />
+            <Send size={15} strokeWidth={2.5} className="text-white" />
           </button>
         </form>
       )}

@@ -154,8 +154,8 @@ export function ChatWidget({
           {/* Unread badge */}
           {unreadCount > 0 && !isOpen && (
             <span
-              className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full text-white text-[11px] flex items-center justify-center font-bold border-2 border-white shadow-sm"
-              style={{ backgroundColor: '#10B981' }}
+              className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-[10px] flex items-center justify-center font-bold border-2 border-white"
+              style={{ backgroundColor: '#ED1B24' }}
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
