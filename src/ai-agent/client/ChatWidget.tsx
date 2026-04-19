@@ -94,7 +94,7 @@ export function ChatWidget({
       {/* -- Chat Panel -------------------------------------------- */}
       {isOpen && !isMinimized && (
         <div
-          className="absolute bottom-16 right-0 pointer-events-auto"
+          className="absolute bottom-0 right-0 pointer-events-auto"
           style={{
             animation: 'chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
