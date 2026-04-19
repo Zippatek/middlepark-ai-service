@@ -214,8 +214,7 @@ export function ChatWindow({
             <Send size={16} strokeWidth={2} className="text-white" />
           </button>
         </form>
-      </div>
-    </div>
+      )}
 
       {/* -- Footer -------------------------------------------------- */}
       <div
