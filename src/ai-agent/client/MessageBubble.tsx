@@ -1,9 +1,9 @@
 'use client'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MessageBubble — Individual message component in the chat thread
+// -----------------------------------------------------------------------------
+// MessageBubble - Individual message component in the chat thread
 // Version 1.0 | Zippatek Digital Ltd | April 2026
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 import { Bot, User, UserCheck } from 'lucide-react'
 import { PropertyCard } from './PropertyCard'
@@ -98,7 +98,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   )
 }
 
-// ─── LOADING BUBBLE (typing indicator) ───────────────────────────────────────
+// -- LOADING BUBBLE (typing indicator) ---------------------------------------
 
 export function TypingIndicator() {
   return (

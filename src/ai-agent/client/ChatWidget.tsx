@@ -1,13 +1,13 @@
 'use client'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ChatWidget — The floating chat button + panel (embed this on public pages)
+// -----------------------------------------------------------------------------
+// ChatWidget - The floating chat button + panel (embed this on public pages)
 //
 // USAGE: Add <ChatWidget /> to your public layout or any page.
 // It renders a floating button (bottom-right) that opens the chat window.
 //
 // Version 1.0 | Zippatek Digital Ltd | April 2026
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 import { useState, useEffect } from 'react'
 import { MessageCircle, X } from 'lucide-react'
@@ -91,7 +91,7 @@ export function ChatWidget({
       className="fixed z-[9999]"
       style={{ bottom: position.bottom, right: position.right }}
     >
-      {/* ── Chat Panel ──────────────────────────────────────────── */}
+      {/* -- Chat Panel -------------------------------------------- */}
       {isOpen && !isMinimized && (
         <div
           className="absolute bottom-16 right-0"
@@ -112,7 +112,7 @@ export function ChatWidget({
         </div>
       )}
 
-      {/* ── Minimized Bar ─────────────────────────────────────── */}
+      {/* -- Minimized Bar --------------------------------------- */}
       {isMinimized && (
         <button
           onClick={handleOpen}
@@ -128,7 +128,7 @@ export function ChatWidget({
         </button>
       )}
 
-      {/* ── Main FAB Button ─────────────────────────────────────── */}
+      {/* -- Main FAB Button --------------------------------------- */}
       {!isMinimized && (
         <button
           onClick={isOpen ? handleClose : handleOpen}
@@ -163,7 +163,7 @@ export function ChatWidget({
         </button>
       )}
 
-      {/* ── CSS Animations ──────────────────────────────────────── */}
+      {/* -- CSS Animations ---------------------------------------- */}
       <style jsx global>{`
         @keyframes chatSlideUp {
           from {

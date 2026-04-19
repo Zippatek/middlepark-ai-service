@@ -1,9 +1,9 @@
 'use client'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ChatWindow — The expanded chat panel (messages + input)
+// -----------------------------------------------------------------------------
+// ChatWindow - The expanded chat panel (messages + input)
 // Version 1.0 | Zippatek Digital Ltd | April 2026
-// ─────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
 
 import { useEffect, useRef, useState } from 'react'
 import { Send, UserCheck, Bot, X, Minus, RotateCcw } from 'lucide-react'
@@ -81,7 +81,7 @@ export function ChatWindow({
         border: '1px solid #ECECEC',
       }}
     >
-      {/* ── Header ────────────────────────────────────────────────── */}
+      {/* -- Header -------------------------------------------------- */}
       <div
         className="flex items-center justify-between px-4 py-4 flex-shrink-0 border-b"
         style={{
@@ -134,7 +134,7 @@ export function ChatWindow({
         </div>
       </div>
 
-      {/* ── Status banner (waiting/resolved) ─────────────────────── */}
+      {/* -- Status banner (waiting/resolved) ----------------------- */}
       {status === 'waiting_for_human' && (
         <div className="px-4 py-2.5 text-[11px] text-center flex-shrink-0" style={{ background: '#F9FAFB', color: '#6B7280', borderBottom: '1px solid #F3F4F6' }}>
           Our team typically responds in a few minutes.
@@ -152,7 +152,7 @@ export function ChatWindow({
         </div>
       )}
 
-      {/* ── Messages ──────────────────────────────────────────────── */}
+      {/* -- Messages ------------------------------------------------ */}
       <div
         className="flex-1 overflow-y-auto px-4 py-6"
         style={{ background: '#FFF' }}
@@ -169,7 +169,7 @@ export function ChatWindow({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* ── Quick replies ─────────────────────────────────────────── */}
+      {/* -- Quick replies ------------------------------------------- */}
       {messages.length <= 2 && !isLoading && (
         <div className="px-4 pb-3 flex gap-1.5 flex-wrap flex-shrink-0" style={{ background: '#FFF' }}>
           {[
@@ -189,7 +189,7 @@ export function ChatWindow({
         </div>
       )}
 
-      {/* ── Input ─────────────────────────────────────────────────── */}
+      {/* -- Input --------------------------------------------------- */}
       {!isResolved && (
         <form
           onSubmit={handleSubmit}
@@ -217,7 +217,7 @@ export function ChatWindow({
       </div>
     </div>
 
-      {/* ── Footer ────────────────────────────────────────────────── */}
+      {/* -- Footer -------------------------------------------------- */}
       <div
         className="px-4 py-2 text-center text-[10px] flex-shrink-0"
         style={{ color: '#BBBCBF', background: '#fff', borderTop: '1px solid #F0F0F0' }}
