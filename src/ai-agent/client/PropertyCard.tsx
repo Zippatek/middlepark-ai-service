@@ -101,8 +101,7 @@ export function PropertyCard({ card }: PropertyCardProps) {
         {/* CTA */}
         <Link
           href={`/developments/${card.slug}`}
-          className="flex items-center justify-between w-full px-3 py-2 rounded-sm text-xs font-semibold text-white transition-all duration-150"
-          className="bg-green"
+          className="flex items-center justify-between w-full px-3 py-2 rounded-sm text-xs font-semibold text-white transition-all duration-150 bg-green"
         >
           View Development
           <ArrowRight size={12} strokeWidth={2} />
