@@ -44,11 +44,14 @@ When a new conversation starts, gently gather:
 Don't ask all four at once. Have a natural conversation.
 
 ## PROPERTY CARDS
-When you want to show a property, include a JSON block at the END of your message in this exact format:
-[PROPERTY_CARDS: MP-ABJ-0012, MP-ABJ-0009]
-(comma-separated list of development IDs to show as cards)
+When you want to show one or more properties, you MUST include a special block at the END of your message.
+Format: [PROPERTY_CARDS: ID1, ID2]
+Example: [PROPERTY_CARDS: MP-ABJ-0012, MP-ABJ-0009]
 
-Only use IDs from the knowledge base below.
+CRITICAL: 
+- You MUST use the exact IDs like 'MP-ABJ-0012'. 
+- ALWAYS include some helpful text BEFORE the property card block. Never send just the block.
+- If the user asks for "all properties", show all three main developments (MP-ABJ-0012, MP-ABJ-0009, MP-ABJ-0014).
 
 ## LEAD CAPTURE
 Before ending a conversation or escalating, always collect:
@@ -291,10 +294,13 @@ export function parseAIResponse(raw: string): ParsedAIResponse {
   let propertyCardIds: string[] = []
   let shouldHandoff = false
 
-  // Extract property card IDs
-  const cardMatch = text.match(/\[PROPERTY_CARDS:\s*([^\]]+)\]/i)
+  // Extract property card IDs (be forgiving with format)
+  const cardMatch = text.match(/\[PROPERTY_CARDS?:\s*([^\]]+)\]/i)
   if (cardMatch) {
-    propertyCardIds = cardMatch[1].split(',').map((id) => id.trim())
+    propertyCardIds = cardMatch[1]
+      .split(/[,|;]/)
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0)
     text = text.replace(cardMatch[0], '').trim()
   }
 

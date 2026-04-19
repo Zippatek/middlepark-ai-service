@@ -6,7 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useRef, useState } from 'react'
-import { Send, UserCheck, Bot, X, Minus } from 'lucide-react'
+import { Send, UserCheck, Bot, X, Minus, RotateCcw } from 'lucide-react'
 import { MessageBubble, TypingIndicator } from './MessageBubble'
 import type { ClientMessage } from './useChat'
 
@@ -16,6 +16,7 @@ interface ChatWindowProps {
   status: 'ai_active' | 'waiting_for_human' | 'human_active' | 'resolved'
   error: string | null
   onSendMessage: (message: string) => void
+  onNewChat: () => void
   onClose: () => void
   onMinimize: () => void
 }
@@ -26,6 +27,7 @@ export function ChatWindow({
   status,
   error,
   onSendMessage,
+  onNewChat,
   onClose,
   onMinimize,
 }: ChatWindowProps) {
@@ -108,6 +110,14 @@ export function ChatWindow({
 
         <div className="flex items-center gap-1">
           <button
+            onClick={onNewChat}
+            className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/20"
+            title="Start new chat"
+            aria-label="Start new chat"
+          >
+            <RotateCcw size={14} strokeWidth={2} className="text-white" />
+          </button>
+          <button
             onClick={onMinimize}
             className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:bg-white/20"
             aria-label="Minimize chat"
@@ -131,8 +141,14 @@ export function ChatWindow({
         </div>
       )}
       {status === 'resolved' && (
-        <div className="px-4 py-2 text-xs text-center flex-shrink-0" style={{ background: '#F0F4F1', color: '#286B38' }}>
-          ✓ This conversation has been resolved. Start a new chat anytime.
+        <div className="px-4 py-3 text-xs text-center flex-shrink-0 flex flex-col items-center gap-2" style={{ background: '#F0F4F1', color: '#286B38' }}>
+          <p>✓ This conversation has been resolved.</p>
+          <button 
+            onClick={onNewChat}
+            className="px-4 py-1.5 rounded-full bg-green text-white font-semibold transition-all hover:opacity-90 shadow-sm"
+          >
+            Start New Chat
+          </button>
         </div>
       )}
 

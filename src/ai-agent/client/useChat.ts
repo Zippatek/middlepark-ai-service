@@ -177,6 +177,25 @@ export function useChat() {
     [isLoading, conversationId],
   )
 
+  const startNewChat = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('mp_chat_session')
+    }
+    sessionId.current = getOrCreateSessionId()
+    setMessages([
+      {
+        id: 'greeting',
+        role: 'assistant',
+        content:
+          "Hello! Welcome to MiddlePark Properties. I'm here to help you find the right home in Abuja.\n\nAre you looking to buy for yourself or as an investment? And what's your approximate budget?",
+        timestamp: new Date().toISOString(),
+      },
+    ])
+    setConversationId(null)
+    setStatus('ai_active')
+    setError(null)
+  }, [])
+
   const clearError = useCallback(() => setError(null), [])
 
   return {
@@ -186,6 +205,7 @@ export function useChat() {
     conversationId,
     error,
     sendMessage,
+    startNewChat,
     clearError,
     sessionId: sessionId.current,
   }

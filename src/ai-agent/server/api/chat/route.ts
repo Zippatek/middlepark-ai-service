@@ -113,21 +113,49 @@ export async function POST(req: NextRequest) {
 
     // Call LLM
     const rawResponse = await callLLM(llmMessages)
+    console.log('[AI Agent] Raw Response:', rawResponse)
 
     // Parse response
     const parsed = parseAIResponse(rawResponse)
+    console.log('[AI Agent] Parsed Response:', parsed)
 
     // Build property cards if requested
-    const propertyCards = parsed.propertyCardIds
-      .map((id) => DEVELOPMENTS.find((d) => d.id === id))
+    let propertyCardIds = parsed.propertyCardIds
+
+    // If the AI says "all", expand it
+    if (propertyCardIds.length === 1 && propertyCardIds[0].toLowerCase() === 'all') {
+      propertyCardIds = DEVELOPMENTS.map((d) => d.id)
+    }
+
+    const propertyCards = propertyCardIds
+      .map((idOrName) => {
+        // Try exact ID match
+        let dev = DEVELOPMENTS.find((d) => d.id === idOrName)
+        if (dev) return dev
+
+        // Try slug match
+        dev = DEVELOPMENTS.find((d) => d.slug === idOrName.toLowerCase())
+        if (dev) return dev
+
+        // Try fuzzy name match
+        dev = DEVELOPMENTS.find((d) =>
+          d.name.toLowerCase().includes(idOrName.toLowerCase()),
+        )
+        return dev
+      })
       .filter(Boolean)
       .map((d) => toPropertyCard(d!))
 
     // Build assistant message
+    let content = parsed.text
+    if (!content && propertyCards.length > 0) {
+      content = 'Here are the properties I found for you:'
+    }
+
     const assistantMessage: ChatMessage = {
       id: nanoid(),
       role: 'assistant',
-      content: parsed.text,
+      content,
       timestamp: new Date().toISOString(),
       propertyCards: propertyCards.length > 0 ? propertyCards : undefined,
     }

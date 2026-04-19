@@ -105,6 +105,7 @@ export function ChatWidget({
             status={chat.status}
             error={chat.error}
             onSendMessage={chat.sendMessage}
+            onNewChat={chat.startNewChat}
             onClose={handleClose}
             onMinimize={handleMinimize}
           />
