@@ -165,6 +165,8 @@ export async function callLLM(messages: LLMMessage[]): Promise<string> {
     return callGemini(messages)
   } else if (provider === 'openai') {
     return callOpenAI(messages)
+  } else if (provider === 'groq') {
+    return callGroq(messages)
   }
 
   throw new Error(`Unknown AI_PROVIDER: ${provider}`)
@@ -235,6 +237,41 @@ async function callOpenAI(messages: LLMMessage[]): Promise<string> {
   if (!res.ok) {
     const err = await res.text()
     throw new Error(`OpenAI API error: ${err}`)
+  }
+
+  const data = await res.json()
+  return data.choices?.[0]?.message?.content || ''
+}
+
+async function callGroq(messages: LLMMessage[]): Promise<string> {
+  const apiKey = process.env.GROQ_API_KEY
+  if (!apiKey) throw new Error('GROQ_API_KEY is not set')
+
+  const model = process.env.GROQ_MODEL || 'llama-3.1-8b-instant'
+  const systemPrompt = buildSystemPrompt()
+
+  const body = {
+    model,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      ...messages.map((m) => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content })),
+    ],
+    max_tokens: 1024,
+    temperature: 0.7,
+  }
+
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error(`Groq API error: ${err}`)
   }
 
   const data = await res.json()

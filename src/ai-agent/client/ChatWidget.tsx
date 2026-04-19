@@ -111,8 +111,7 @@ export function ChatWidget({
       {isMinimized && (
         <button
           onClick={handleOpen}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-medium shadow-lg transition-all hover:shadow-xl"
-          className="bg-green"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-medium shadow-lg transition-all hover:shadow-xl bg-green"
         >
           <MessageCircle size={16} strokeWidth={1.5} />
           <span>Chat with us</span>
@@ -128,8 +127,7 @@ export function ChatWidget({
       {!isMinimized && (
         <button
           onClick={isOpen ? handleClose : handleOpen}
-          className="relative w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
-          className="bg-green"
+          className="relative w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 bg-green"
           aria-label={isOpen ? 'Close chat' : 'Open chat'}
         >
           <div
