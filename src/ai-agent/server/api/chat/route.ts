@@ -74,6 +74,16 @@ export async function POST(req: NextRequest) {
     // Build LLM message history
     const llmMessages: LLMMessage[] = []
 
+    // If this is the very first user message, the user has likely already seen 
+    // the frontend's hardcoded greeting. We inject it into the history (without saving)
+    // so the AI doesn't repeat it.
+    if (conv.messages.length === 1 && conv.messages[0].role === 'user') {
+      llmMessages.push({
+        role: 'assistant',
+        content: "Hello! Welcome to MiddlePark Properties. I'm here to help you find the right home.\n\nAre you looking to buy for yourself or as an investment? And what's your approximate budget?",
+      })
+    }
+
     for (const msg of conv.messages) {
       if (msg.role === 'user') {
         llmMessages.push({ role: 'user', content: msg.content })
@@ -145,6 +155,22 @@ export async function POST(req: NextRequest) {
     // Generic fallback if still no content
     if (!content) {
       content = "I'm sorry, I didn't quite catch that. Could you please tell me more about what you're looking for? I'd love to help you find the right property."
+    }
+
+    // Handle proactive handoff detection
+    const wantsAgent = 
+      lowerMsg.includes('agent') || 
+      lowerMsg.includes('human') || 
+      lowerMsg.includes('person') || 
+      lowerMsg.includes('speak to') || 
+      lowerMsg.includes('talk to') ||
+      lowerMsg.includes('support')
+
+    if (wantsAgent) {
+      parsed.shouldHandoff = true
+      // Clear out any property cards the AI might have tried to force
+      propertyCards.length = 0
+      content = "Absolutely. I'm transferring you to one of our dedicated property consultants now. They will be right with you."
     }
 
     const assistantMessage: ChatMessage = {

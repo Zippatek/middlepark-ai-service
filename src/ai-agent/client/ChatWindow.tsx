@@ -68,6 +68,18 @@ export function ChatWindow({
   }[status]
 
   const isResolved = status === 'resolved'
+  
+  const firstHumanIndex = messages.findIndex(
+    (m) => m.role === 'agent' || (m.role === 'assistant' && m.agentName)
+  )
+
+  const isWaitingForHumanReply = 
+    status === 'human_active' && 
+    messages.length > 0 && 
+    messages[messages.length - 1].role === 'user'
+
+  const showTypingIndicator = isLoading || isWaitingForHumanReply
+  const typingIndicatorType = status === 'human_active' ? 'human' : 'bot'
 
   return (
     <div
@@ -132,10 +144,63 @@ export function ChatWindow({
         className="flex-1 overflow-y-auto px-4 py-6"
         style={{ background: '#FFF' }}
       >
-        {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
-        ))}
-        {isLoading && <TypingIndicator />}
+        {messages.map((msg, index) => {
+          const isFirstHuman = index === firstHumanIndex
+          return (
+            <div key={msg.id}>
+              {isFirstHuman && (
+                <div className="flex justify-center mb-6 mt-2">
+                  <div 
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-sm transition-all duration-500 ease-in-out"
+                    style={{ 
+                      backgroundColor: '#F0FDF4',
+                      border: '1px solid #BBF7D0',
+                    }}
+                  >
+                    <UserCheck size={14} className="text-green-600" />
+                    <span 
+                      className="text-[11px] font-semibold tracking-wide uppercase"
+                      style={{ color: '#166534' }}
+                    >
+                      Connected to Agent
+                    </span>
+                  </div>
+                </div>
+              )}
+              <MessageBubble message={msg} status={status} />
+            </div>
+          )
+        })}
+        {status === 'waiting_for_human' && (
+          <div className="flex justify-center mb-6 mt-2">
+            <div 
+              className="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-sm transition-all duration-500 ease-in-out"
+              style={{ 
+                backgroundColor: '#FFFBEB',
+                border: '1px solid #FEF3C7',
+              }}
+            >
+              <div className="flex gap-1 items-center mr-1">
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="w-1 h-1 rounded-full bg-amber-500"
+                    style={{
+                      animation: `bounce 1.4s ease-in-out ${i * 0.2}s infinite`,
+                    }}
+                  />
+                ))}
+              </div>
+              <span 
+                className="text-[11px] font-semibold tracking-wide uppercase"
+                style={{ color: '#B45309' }}
+              >
+                Connecting...
+              </span>
+            </div>
+          </div>
+        )}
+        {showTypingIndicator && <TypingIndicator agentType={typingIndicatorType} />}
         {error && (
           <div className="text-center py-2">
             <p className="text-xs text-red-500">{error}</p>
