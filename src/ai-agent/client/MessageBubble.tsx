@@ -79,14 +79,18 @@ export function MessageBubble({ message, status }: MessageBubbleProps) {
 
 // -- LOADING BUBBLE (typing indicator) ---------------------------------------
 
-export function TypingIndicator() {
+export function TypingIndicator({ agentType = 'bot' }: { agentType?: 'bot' | 'human' }) {
   return (
     <div className="flex gap-3 mb-5">
       <div
         className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
         style={{ backgroundColor: '#F9FAFB', border: '1px solid #EDEDED' }}
       >
-        <Bot size={16} strokeWidth={2} className="text-charcoal-dark" />
+        {agentType === 'bot' ? (
+          <Bot size={16} strokeWidth={2} className="text-charcoal-dark" />
+        ) : (
+          <User size={16} strokeWidth={2} className="text-charcoal-dark" />
+        )}
       </div>
       <div
         className="px-5 py-4 rounded-2xl rounded-tl-sm"

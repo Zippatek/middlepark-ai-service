@@ -73,6 +73,14 @@ export function ChatWindow({
     (m) => m.role === 'agent' || (m.role === 'assistant' && m.agentName)
   )
 
+  const isWaitingForHumanReply = 
+    status === 'human_active' && 
+    messages.length > 0 && 
+    messages[messages.length - 1].role === 'user'
+
+  const showTypingIndicator = isLoading || isWaitingForHumanReply
+  const typingIndicatorType = status === 'human_active' ? 'human' : 'bot'
+
   return (
     <div
       className="flex flex-col rounded-2xl overflow-hidden"
@@ -192,7 +200,7 @@ export function ChatWindow({
             </div>
           </div>
         )}
-        {isLoading && <TypingIndicator />}
+        {showTypingIndicator && <TypingIndicator agentType={typingIndicatorType} />}
         {error && (
           <div className="text-center py-2">
             <p className="text-xs text-red-500">{error}</p>
