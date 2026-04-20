@@ -157,6 +157,22 @@ export async function POST(req: NextRequest) {
       content = "I'm sorry, I didn't quite catch that. Could you please tell me more about what you're looking for? I'd love to help you find the right property."
     }
 
+    // Handle proactive handoff detection
+    const wantsAgent = 
+      lowerMsg.includes('agent') || 
+      lowerMsg.includes('human') || 
+      lowerMsg.includes('person') || 
+      lowerMsg.includes('speak to') || 
+      lowerMsg.includes('talk to') ||
+      lowerMsg.includes('support')
+
+    if (wantsAgent) {
+      parsed.shouldHandoff = true
+      // Clear out any property cards the AI might have tried to force
+      propertyCards.length = 0
+      content = "I'll connect you with a human agent right now. Please hold on — they'll be with you shortly."
+    }
+
     const assistantMessage: ChatMessage = {
       id: nanoid(),
       role: 'assistant',
