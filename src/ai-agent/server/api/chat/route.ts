@@ -74,6 +74,16 @@ export async function POST(req: NextRequest) {
     // Build LLM message history
     const llmMessages: LLMMessage[] = []
 
+    // If this is the very first user message, the user has likely already seen 
+    // the frontend's hardcoded greeting. We inject it into the history (without saving)
+    // so the AI doesn't repeat it.
+    if (conv.messages.length === 1 && conv.messages[0].role === 'user') {
+      llmMessages.push({
+        role: 'assistant',
+        content: "Hello! Welcome to MiddlePark Properties. I'm here to help you find the right home.\n\nAre you looking to buy for yourself or as an investment? And what's your approximate budget?",
+      })
+    }
+
     for (const msg of conv.messages) {
       if (msg.role === 'user') {
         llmMessages.push({ role: 'user', content: msg.content })
