@@ -335,6 +335,7 @@ Certifications: ${COMPANY_INFO.certifications.join(' | ')}
 Sales Email: ${COMPANY_INFO.contacts.salesEmail}
 Phone: ${COMPANY_INFO.contacts.phone}
 WhatsApp: ${COMPANY_INFO.contacts.whatsapp}
+Offices: ${COMPANY_INFO.contacts.offices.map(o => `${o.name}: ${o.address} (${o.hours})`).join(' | ')}
 
 ## CURRENT DEVELOPMENTS
 ${devStrings}

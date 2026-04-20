@@ -72,42 +72,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Build LLM message history
-    // For Gemini: use 'user' and 'model' roles
-    // For OpenAI: the system prompt is injected in the callLLM function
-    const provider = process.env.AI_PROVIDER || 'gemini'
-
     const llmMessages: LLMMessage[] = []
 
-    // For Gemini, we need to embed system prompt as first user message (Gemini doesn't have system role)
-    if (provider === 'gemini') {
-      llmMessages.push({
-        role: 'user',
-        content: `[SYSTEM INSTRUCTIONS - READ CAREFULLY]\n${buildSystemPrompt()}\n\n[END SYSTEM INSTRUCTIONS]\n\nNow begin the conversation. User's first message: ${message}`,
-      })
-
-      // Add prior conversation history (skip the first user message since we embedded it above)
-      const priorMessages = conv.messages.slice(0, -1) // exclude the just-added message
-      for (const msg of priorMessages) {
-        if (msg.role === 'user') {
-          llmMessages.push({ role: 'user', content: msg.content })
-        } else if (msg.role === 'assistant') {
-          llmMessages.push({ role: 'model', content: msg.content })
-        }
-        // Skip agent messages in AI context
-      }
-
-      // Add the current user message
-      if (conv.messages.length > 1) {
-        llmMessages.push({ role: 'user', content: message })
-      }
-    } else {
-      // OpenAI — system prompt is handled in callLLM, just build history
-      for (const msg of conv.messages) {
-        if (msg.role === 'user') {
-          llmMessages.push({ role: 'user', content: msg.content })
-        } else if (msg.role === 'assistant') {
-          llmMessages.push({ role: 'assistant', content: msg.content })
-        }
+    for (const msg of conv.messages) {
+      if (msg.role === 'user') {
+        llmMessages.push({ role: 'user', content: msg.content })
+      } else if (msg.role === 'assistant') {
+        llmMessages.push({ role: 'assistant', content: msg.content })
       }
     }
 
@@ -146,10 +117,34 @@ export async function POST(req: NextRequest) {
       .filter(Boolean)
       .map((d) => toPropertyCard(d!))
 
+    // Intent detection (even if AI returned text)
+    const lowerMsg = message.toLowerCase()
+    const wantsProperties = 
+      lowerMsg.includes('show') || 
+      lowerMsg.includes('property') || 
+      lowerMsg.includes('properties') || 
+      lowerMsg.includes('available') ||
+      lowerMsg.includes('all') ||
+      lowerMsg.includes('what') && lowerMsg.includes('have')
+
     // Build assistant message
     let content = parsed.text
-    if (!content && propertyCards.length > 0) {
-      content = 'Here are the properties I found for you:'
+
+    // If the user wants properties but AI didn't provide any cards, force them
+    if (wantsProperties && propertyCards.length === 0) {
+      // AI was too talkative or missed the cards — let's help it
+      propertyCardIds = DEVELOPMENTS.map(d => d.id)
+      const forcedCards = propertyCardIds.map(id => toPropertyCard(DEVELOPMENTS.find(d => d.id === id)!))
+      propertyCards.push(...forcedCards)
+      
+      if (!content) {
+        content = "Certainly! Here are our current developments:"
+      }
+    }
+
+    // Generic fallback if still no content
+    if (!content) {
+      content = "I'm sorry, I didn't quite catch that. Could you please tell me more about what you're looking for? I'd love to help you find the right property."
     }
 
     const assistantMessage: ChatMessage = {
