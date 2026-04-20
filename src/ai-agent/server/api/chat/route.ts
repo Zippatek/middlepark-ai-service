@@ -170,7 +170,7 @@ export async function POST(req: NextRequest) {
       parsed.shouldHandoff = true
       // Clear out any property cards the AI might have tried to force
       propertyCards.length = 0
-      content = "I'll connect you with a human agent right now. Please hold on — they'll be with you shortly."
+      content = "Absolutely. I'm transferring you to one of our dedicated property consultants now. They will be right with you."
     }
 
     const assistantMessage: ChatMessage = {

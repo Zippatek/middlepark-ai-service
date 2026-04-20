@@ -133,7 +133,7 @@ export function ChatWindow({
         style={{ background: '#FFF' }}
       >
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
+          <MessageBubble key={msg.id} message={msg} status={status} />
         ))}
         {isLoading && <TypingIndicator />}
         {error && (
