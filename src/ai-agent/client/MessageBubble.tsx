@@ -45,44 +45,6 @@ export function MessageBubble({ message, status }: MessageBubbleProps) {
     )
   }
 
-  // Special rendering for the handoff connection message
-  if (message.content === '⏳ Connecting you with a member of our team...') {
-    const isConnected = status === 'human_active' || status === 'resolved'
-    return (
-      <div className="flex justify-center mb-6 my-2">
-        <div 
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-sm transition-all duration-500 ease-in-out"
-          style={{ 
-            backgroundColor: isConnected ? '#F0FDF4' : '#FFFBEB',
-            border: `1px solid ${isConnected ? '#BBF7D0' : '#FEF3C7'}`,
-          }}
-        >
-          {isConnected ? (
-            <UserCheck size={14} className="text-green-600" />
-          ) : (
-            <div className="flex gap-1 items-center mr-1">
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  className="w-1 h-1 rounded-full bg-amber-500"
-                  style={{
-                    animation: `bounce 1.4s ease-in-out ${i * 0.2}s infinite`,
-                  }}
-                />
-              ))}
-            </div>
-          )}
-          <span 
-            className="text-[11px] font-semibold tracking-wide uppercase"
-            style={{ color: isConnected ? '#166534' : '#B45309' }}
-          >
-            {isConnected ? 'Connected to Agent' : 'Connecting...'}
-          </span>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex justify-start mb-6">
       <div className="max-w-[85%]">

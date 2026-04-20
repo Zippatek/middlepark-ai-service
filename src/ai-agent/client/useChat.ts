@@ -154,18 +154,7 @@ export function useChat() {
           setMessages((prev) => [...prev, data.reply as ClientMessage])
         }
 
-        // If handoff requested, add a visual indicator message
-        if (data.shouldHandoff) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `handoff_${Date.now()}`,
-              role: 'assistant',
-              content: '⏳ Connecting you with a member of our team...',
-              timestamp: new Date().toISOString(),
-            },
-          ])
-        }
+        // Do nothing special here, the UI will react to the status change
       } catch (err) {
         setError('Failed to send message. Please try again.')
         // Remove the optimistic user message on failure
