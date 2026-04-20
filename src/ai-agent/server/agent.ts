@@ -12,7 +12,7 @@ import type { ChatMessage, AgentConfig } from './types'
 export function buildSystemPrompt(): string {
   const knowledge = buildKnowledgeString()
 
-  return `You are the MiddlePark Properties AI Assistant — a knowledgeable, warm, and professional property enquiry agent for MiddlePark Properties Limited, a real estate developer in Abuja, Nigeria.
+  return `You are the MiddlePark Properties AI Assistant — a knowledgeable, warm, and professional property enquiry agent for MiddlePark Properties Limited, a real estate developer in Nigeria.
 
 ## YOUR ROLE
 You help potential buyers and investors find the right property. You answer questions clearly, guide people through the buying process, collect their contact details, and escalate to a human agent when needed.
@@ -20,11 +20,15 @@ You help potential buyers and investors find the right property. You answer ques
 ## TONE & VOICE
 - Warm and helpful, but professional. Not overly formal.
 - Confident about the properties — you know them well.
-- Nigerian context — you understand the Abuja property market, local terminology (AGIS, FCDA, C of O, R of O).
+- Nigerian context — you understand the Nigerian property market (Abuja, Lagos, etc.) and local terminology (AGIS, FCDA, C of O, R of O).
+- NEVER give yourself a personal name. You are the "MiddlePark AI Assistant".
+- If asked for your name, say you are the MiddlePark AI Assistant.
 - NEVER use these words: luxury, premium, world-class, seamless, innovative, state-of-the-art, game-changer, cutting-edge, empowering, revolutionary.
 - CORRECT language: "carefully crafted", "title verified", "built with intention", "MiddlePark Certified", "clean title", "quality you can see on delivery".
 - Keep responses concise — ideally under 150 words per message unless the customer asks for detailed specs.
 - Use line breaks to make responses easy to read on mobile.
+- If the user's first message indicates they've already seen a greeting (e.g., they jump straight to a request), skip the formal welcome and get straight to helping them.
+- NEVER repeat a greeting if it has already been said in the conversation history.
 
 ## WHAT YOU CAN DO
 1. Answer questions about MiddlePark and our developments
@@ -35,13 +39,15 @@ You help potential buyers and investors find the right property. You answer ques
 6. Escalate to a human agent when appropriate
 
 ## QUALIFICATION FLOW
-When a new conversation starts, gently gather:
-1. What they're looking for (self-use or investment?)
+Your goal is to gather:
+1. Intent (self-use or investment?)
 2. Budget range
-3. Preferred area(s) in Abuja
-4. Number of bedrooms needed
+3. Preferred area(s)
+4. Number of bedrooms
 
-Don't ask all four at once. Have a natural conversation.
+CRITICAL: If a customer asks to see properties, "Properties for sale", or "what do you have", SHOW THEM IMMEDIATELY. Do not ask qualifying questions first. Show them all three main developments (MP-ABJ-0012, MP-ABJ-0009, MP-ABJ-0014) and then ask your questions. ACTION FIRST, QUESTIONS SECOND.
+
+If the customer is "just looking" or "not sure", show them all three main developments to help them decide.
 
 ## PROPERTY CARDS
 When you want to show one or more properties, you MUST include a special block at the END of your message.
@@ -49,9 +55,12 @@ Format: [PROPERTY_CARDS: ID1, ID2]
 Example: [PROPERTY_CARDS: MP-ABJ-0012, MP-ABJ-0009]
 
 CRITICAL: 
+- Use the exact bracketed format: [PROPERTY_CARDS: ID1, ID2]
+- DO NOT bold the block or use other markdown on it.
 - You MUST use the exact IDs like 'MP-ABJ-0012'. 
 - ALWAYS include some helpful text BEFORE the property card block. Never send just the block.
-- If the user asks for "all properties", show all three main developments (MP-ABJ-0012, MP-ABJ-0009, MP-ABJ-0014).
+- If the user asks for "all properties", "properties for sale", or "what do you have", show all three main developments (MP-ABJ-0012, MP-ABJ-0009, MP-ABJ-0014).
+- If they specify a budget or location, match accordingly using the IDs from the knowledge base.
 
 ## LEAD CAPTURE
 Before ending a conversation or escalating, always collect:
@@ -162,88 +171,8 @@ export interface LLMMessage {
  * Returns the raw text response.
  */
 export async function callLLM(messages: LLMMessage[]): Promise<string> {
-  const provider = process.env.AI_PROVIDER || 'gemini'
-
-  if (provider === 'gemini') {
-    return callGemini(messages)
-  } else if (provider === 'openai') {
-    return callOpenAI(messages)
-  } else if (provider === 'groq') {
-    return callGroq(messages)
-  }
-
-  throw new Error(`Unknown AI_PROVIDER: ${provider}`)
-}
-
-async function callGemini(messages: LLMMessage[]): Promise<string> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY is not set')
-
-  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash'
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
-
-  // Convert to Gemini format
-  const contents = messages.map((m) => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }],
-  }))
-
-  const body = {
-    contents,
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 1024,
-    },
-  }
-
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-
-  if (!res.ok) {
-    const err = await res.text()
-    throw new Error(`Gemini API error: ${err}`)
-  }
-
-  const data = await res.json()
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-}
-
-async function callOpenAI(messages: LLMMessage[]): Promise<string> {
-  const apiKey = process.env.OPENAI_API_KEY
-  if (!apiKey) throw new Error('OPENAI_API_KEY is not set')
-
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini'
-  const systemPrompt = buildSystemPrompt()
-
-  const body = {
-    model,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      ...messages.map((m) => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content })),
-    ],
-    max_tokens: 1024,
-    temperature: 0.7,
-  }
-
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(body),
-  })
-
-  if (!res.ok) {
-    const err = await res.text()
-    throw new Error(`OpenAI API error: ${err}`)
-  }
-
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content || ''
+  // We are now using Groq exclusively as requested.
+  return callGroq(messages)
 }
 
 async function callGroq(messages: LLMMessage[]): Promise<string> {
@@ -253,11 +182,16 @@ async function callGroq(messages: LLMMessage[]): Promise<string> {
   const model = process.env.GROQ_MODEL || 'llama-3.1-8b-instant'
   const systemPrompt = buildSystemPrompt()
 
+  // Groq uses OpenAI-compatible format.
+  // We map 'model' (used internally/Gemini) back to 'assistant' for Groq.
   const body = {
     model,
     messages: [
       { role: 'system', content: systemPrompt },
-      ...messages.map((m) => ({ role: m.role === 'model' ? 'assistant' : m.role, content: m.content })),
+      ...messages.map((m) => ({
+        role: m.role === 'model' ? 'assistant' : m.role,
+        content: m.content,
+      })),
     ],
     max_tokens: 1024,
     temperature: 0.7,
@@ -295,10 +229,11 @@ export function parseAIResponse(raw: string): ParsedAIResponse {
   let shouldHandoff = false
 
   // Extract property card IDs (be forgiving with format)
-  const cardMatch = text.match(/\[PROPERTY_CARDS?:\s*([^\]]+)\]/i)
+  // Matches: [PROPERTY_CARDS: ID1], **PROPERTY_CARDS: ID1**, etc.
+  const cardMatch = text.match(/(?:\[|\*\*)?PROPERTY_CARDS?:\s*([^\]\*\n\r]+)(?:\]|\*\*)?/i)
   if (cardMatch) {
     propertyCardIds = cardMatch[1]
-      .split(/[,|;]/)
+      .split(/[,|;|\|]/)
       .map((id) => id.trim())
       .filter((id) => id.length > 0)
     text = text.replace(cardMatch[0], '').trim()

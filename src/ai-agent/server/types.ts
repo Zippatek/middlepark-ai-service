@@ -143,7 +143,7 @@ export interface DashboardStats {
 // ─── AGENT CONFIG ─────────────────────────────────────────────────────────────
 
 export interface AgentConfig {
-  provider: 'gemini' | 'openai'
+  provider: 'groq'
   model: string
   maxTokens: number
   temperature: number
